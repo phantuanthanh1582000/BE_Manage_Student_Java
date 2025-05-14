@@ -8,38 +8,19 @@ import org.springframework.stereotype.Service;
 
 import com.example.studentmanagement.models.Department;
 import com.example.studentmanagement.repositories.DepartmentRepository;
-import com.example.studentmanagement.repositories.MajorRepository;
+
 
 @Service
 public class DepartmentService {
 
     @Autowired
     private DepartmentRepository departmentRepository;
-    @Autowired
-    private MajorRepository majorRepository;
+    
 
     public List<Department> getAll() {
     return departmentRepository.findByIsDeletedFalse(); 
 }
 
-public Department addMajorToDepartment(String departmentId, String majorId) {
-        // Tìm Department theo ID
-        Department department = departmentRepository.findById(departmentId)
-                .orElseThrow(() -> new RuntimeException("Department not found"));
-
-        // Kiểm tra nếu Major đã tồn tại
-        if (!majorRepository.existsById(majorId)) {
-            throw new RuntimeException("Major not found");
-        }
-
-        // Thêm ID của Major vào danh sách majors trong Department (nếu chưa có)
-        if (!department.getMajorIds().contains(majorId)) {
-            department.getMajorIds().add(majorId);
-        }
-
-        // Lưu lại Department với Major đã được thêm
-        return departmentRepository.save(department);
-    }
 
     public Department getById(String id) {
     return departmentRepository.findById(id)
@@ -94,16 +75,6 @@ public Department addMajorToDepartment(String departmentId, String majorId) {
 
     existing.setDeleted(true); 
     departmentRepository.save(existing); 
-}
-
-    public Department removeMajorFromDepartment(String departmentId, String majorId) {
-    
-    Department department = departmentRepository.findById(departmentId)
-            .orElseThrow(() -> new RuntimeException("Không tìm thấy khoa"));
-
-    department.getMajorIds().removeIf(id -> id.equals(majorId));
-
-    return departmentRepository.save(department);
 }
 
 }

@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.studentmanagement.dto.ResponseWrapper;
 import com.example.studentmanagement.models.Major;
-import com.example.studentmanagement.services.DepartmentService;
 import com.example.studentmanagement.services.MajorService;
 
 @RestController
@@ -24,9 +23,6 @@ public class MajorController {
 
     @Autowired
     private MajorService majorService;
-
-    @Autowired
-    private DepartmentService departmentService;
 
     @GetMapping
     public ResponseEntity<ResponseWrapper<List<Major>>> getAllMajors() {
@@ -47,11 +43,7 @@ public class MajorController {
     //Tạo majors
     @PostMapping("/departments/{departmentId}")
     public ResponseEntity<ResponseWrapper<Major>> addMajor(@PathVariable String departmentId, @RequestBody Major major) {
-        
-        Major savedMajor = majorService.addMajor(major);
-        
-        departmentService.addMajorToDepartment(departmentId, savedMajor.getId());
-
+        Major savedMajor = majorService.addMajor(major, departmentId);
         ResponseWrapper<Major> response = new ResponseWrapper<>(1, "Thêm ngành thành công", savedMajor);
         return ResponseEntity.ok(response);
     }
@@ -67,12 +59,10 @@ public class MajorController {
 
     //Xóa Major khỏi Department
     @DeleteMapping("/{majorId}/departments/{departmentId}")
-public ResponseEntity<ResponseWrapper<String>> deleteMajor(@PathVariable String departmentId, @PathVariable String majorId) {
-    majorService.updateIsDeleted(majorId);
+    public ResponseEntity<ResponseWrapper<String>> deleteMajor(@PathVariable String departmentId, @PathVariable String majorId) {
+        majorService.updateIsDeleted(majorId, departmentId);
 
-    departmentService.removeMajorFromDepartment(departmentId, majorId);
-
-    ResponseWrapper<String> response = new ResponseWrapper<>(1, "Xóa ngành học thành công", "Ngành học đã xóa khỏi khoa.");
-    return ResponseEntity.ok(response);
-}
+        ResponseWrapper<String> response = new ResponseWrapper<>(1, "Xóa ngành học thành công", "Ngành học đã xóa khỏi khoa.");
+        return ResponseEntity.ok(response);
+    }
 }
