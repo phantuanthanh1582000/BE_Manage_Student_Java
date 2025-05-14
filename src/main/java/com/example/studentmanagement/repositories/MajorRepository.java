@@ -10,7 +10,7 @@ import com.example.studentmanagement.models.Major;
 @Repository
 public interface MajorRepository extends MongoRepository<Major, String> {
 
-    boolean existsByMajorCode(String majorCode);
+    boolean existsByMajorCodeAndIsDelete(String majorCode, boolean isDelete);
 
     boolean existsByName(String name);
 
