@@ -1,27 +1,49 @@
 package com.example.studentmanagement.services;
 
-import com.example.studentmanagement.models.Department;
-import com.example.studentmanagement.repositories.DepartmentRepository;
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
+import com.example.studentmanagement.models.Department;
+import com.example.studentmanagement.repositories.DepartmentRepository;
+import com.example.studentmanagement.repositories.MajorRepository;
 
 @Service
 public class DepartmentService {
 
     @Autowired
     private DepartmentRepository departmentRepository;
+    @Autowired
+    private MajorRepository majorRepository;
 
     public List<Department> getAll() {
-        return departmentRepository.findAll();
+    return departmentRepository.findByIsDeletedFalse(); 
+}
+
+public Department addMajorToDepartment(String departmentId, String majorId) {
+        // Tìm Department theo ID
+        Department department = departmentRepository.findById(departmentId)
+                .orElseThrow(() -> new RuntimeException("Department not found"));
+
+        // Kiểm tra nếu Major đã tồn tại
+        if (!majorRepository.existsById(majorId)) {
+            throw new RuntimeException("Major not found");
+        }
+
+        // Thêm ID của Major vào danh sách majors trong Department (nếu chưa có)
+        if (!department.getMajorIds().contains(majorId)) {
+            department.getMajorIds().add(majorId);
+        }
+
+        // Lưu lại Department với Major đã được thêm
+        return departmentRepository.save(department);
     }
 
-    public Optional<Department> getById(String id) {
-    Department existing = departmentRepository.findById(id)
-            .orElseThrow(() -> new RuntimeException("Department not found with id: " + id));
-    return Optional.of(existing);  
+    public Department getById(String id) {
+    return departmentRepository.findById(id)
+        .orElseThrow(() -> new RuntimeException("Không tìm thấy ngành với id: " + id));
 }
 
     public Department create(Department department) {
@@ -67,9 +89,21 @@ public class DepartmentService {
 
 
     public void delete(String id) {
-        if (!departmentRepository.existsById(id)) {
-            throw new RuntimeException("Department not found with id: " + id);
-        }
-        departmentRepository.deleteById(id);
-    }
+    Department existing = departmentRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("Department not found with id: " + id));
+
+    existing.setDeleted(true); 
+    departmentRepository.save(existing); 
+}
+
+    public Department removeMajorFromDepartment(String departmentId, String majorId) {
+    
+    Department department = departmentRepository.findById(departmentId)
+            .orElseThrow(() -> new RuntimeException("Không tìm thấy khoa"));
+
+    department.getMajorIds().removeIf(id -> id.equals(majorId));
+
+    return departmentRepository.save(department);
+}
+
 }
