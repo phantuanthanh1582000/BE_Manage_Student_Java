@@ -32,7 +32,6 @@ public class MajorService {
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy ngành học với ID: " + majorId));
     }
 
-    // Thêm Major mới vào collection majors
     public Major addMajor(Major major, String departmentId) {
     Department department = departmentRepository.findById(departmentId)
             .orElseThrow(() -> new RuntimeException("Không tìm thấy khoa."));
@@ -52,8 +51,7 @@ public class MajorService {
 
     Major savedMajor = majorRepository.save(major);
 
-    // Gắn major vào department
-    List<String> majorIds = department.getMajorIds(); // hoặc department.getMajors()
+    List<String> majorIds = department.getMajorIds(); 
     if (majorIds == null) {
         majorIds = new ArrayList<>();
     }
@@ -64,7 +62,6 @@ public class MajorService {
     return savedMajor;
 }
 
-    // Cập nhật thông tin Major theo ID
     public Major updateMajor(String majorId, Major updatedMajor) {
     Major existingMajor = majorRepository.findById(majorId)
             .orElseThrow(() -> new RuntimeException("Không tìm thấy ngành học"));
