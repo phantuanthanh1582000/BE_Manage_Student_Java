@@ -1,24 +1,19 @@
 package com.example.studentmanagement.models;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-@Document(collection = "majors")
-public class Major {
+import java.time.LocalDateTime;
+
+@Document(collection = "classes")
+public class ClassModel {
 
     @Id
     private String id;
 
-    private List<String> classIds = new ArrayList<>();
-    private String name;
-    private String majorCode;
-
+    private String className;
     private boolean isDelete;
 
     @CreatedDate
@@ -27,32 +22,27 @@ public class Major {
     @LastModifiedDate
     private LocalDateTime updatedAt;
 
-    public Major() {
+    public ClassModel() {
         this.isDelete = false;
     }
 
-    public Major(String name, String majorCode) {
-        this.name = name;
-        this.majorCode = majorCode;
+    public ClassModel(String className) {
+        this.className = className;
         this.isDelete = false;
     }
-
 
     public String getId() { return id; }
     public void setId(String id) { this.id = id; }
 
-    public String getName() { return name; }
-    public void setName(String name) { this.name = name; }
-
-    public String getMajorCode() { return majorCode; }
-    public void setMajorCode(String majorCode) { this.majorCode = majorCode; }
-
-    public List<String> getClassIds() { return classIds; }
-    public void setClassIds(List<String> classIds) { this.classIds = classIds; }
+    public String getClassName() { return className; }
+    public void setClassName(String className) { this.className = className; }
 
     public boolean isDelete() { return isDelete; }
     public void setDelete(boolean delete) { isDelete = delete; }
 
     public LocalDateTime getCreatedAt() { return createdAt; }
+    public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
+
     public LocalDateTime getUpdatedAt() { return updatedAt; }
+    public void setUpdatedAt(LocalDateTime updatedAt) { this.updatedAt = updatedAt; }
 }
