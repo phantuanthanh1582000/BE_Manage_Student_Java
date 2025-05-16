@@ -23,8 +23,8 @@ public class MajorService {
         this.departmentRepository = departmentRepository;
     }
 
-     public List<Major> getAllMajors() {
-        return majorRepository.findByIsDelete(false); 
+    public List<Major> getAllMajors() {
+        return majorRepository.findByIsDelete(false);
     }
 
     public Major getMajorById(String majorId) {
@@ -33,57 +33,57 @@ public class MajorService {
     }
 
     public Major addMajor(Major major, String departmentId) {
-    Department department = departmentRepository.findById(departmentId)
-            .orElseThrow(() -> new RuntimeException("Không tìm thấy khoa."));
+        Department department = departmentRepository.findById(departmentId)
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy khoa."));
 
-    if (major.getName() == null || major.getName().trim().isEmpty()) {
-        throw new RuntimeException("Tên ngành không được để trống.");
+        if (major.getName() == null || major.getName().trim().isEmpty()) {
+            throw new RuntimeException("Tên ngành không được để trống.");
+        }
+
+        if (major.getMajorCode() == null || major.getMajorCode().trim().isEmpty()) {
+            throw new RuntimeException("Mã ngành không được để trống.");
+        }
+
+        boolean exists = majorRepository.existsByMajorCodeAndIsDelete(major.getMajorCode(), false);
+        if (exists) {
+            throw new RuntimeException("Mã ngành đã tồn tại.");
+        }
+
+        Major savedMajor = majorRepository.save(major);
+
+        List<String> majorIds = department.getMajorIds();
+        if (majorIds == null) {
+            majorIds = new ArrayList<>();
+        }
+        majorIds.add(savedMajor.getId());
+        department.setMajorIds(majorIds);
+        departmentRepository.save(department);
+
+        return savedMajor;
     }
-
-    if (major.getMajorCode() == null || major.getMajorCode().trim().isEmpty()) {
-        throw new RuntimeException("Mã ngành không được để trống.");
-    }
-
-    boolean exists = majorRepository.existsByMajorCodeAndIsDelete(major.getMajorCode(), false);
-    if (exists) {
-        throw new RuntimeException("Mã ngành đã tồn tại.");
-    }
-
-    Major savedMajor = majorRepository.save(major);
-
-    List<String> majorIds = department.getMajorIds(); 
-    if (majorIds == null) {
-        majorIds = new ArrayList<>();
-    }
-    majorIds.add(savedMajor.getId());
-    department.setMajorIds(majorIds);
-    departmentRepository.save(department);
-
-    return savedMajor;
-}
 
     public Major updateMajor(String majorId, Major updatedMajor) {
-    Major existingMajor = majorRepository.findById(majorId)
-            .orElseThrow(() -> new RuntimeException("Không tìm thấy ngành học"));
+        Major existingMajor = majorRepository.findById(majorId)
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy ngành học"));
 
-    if (updatedMajor.getName() != null && !updatedMajor.getName().isEmpty()) {
-        if (majorRepository.existsByName(updatedMajor.getName()) && 
-            !updatedMajor.getName().equals(existingMajor.getName())) {
-            throw new RuntimeException("Tên ngành đã tồn tại");
+        if (updatedMajor.getName() != null && !updatedMajor.getName().isEmpty()) {
+            if (majorRepository.existsByName(updatedMajor.getName()) &&
+                    !updatedMajor.getName().equals(existingMajor.getName())) {
+                throw new RuntimeException("Tên ngành đã tồn tại");
+            }
+            existingMajor.setName(updatedMajor.getName());
         }
-        existingMajor.setName(updatedMajor.getName());
-    }
 
-    if (updatedMajor.getMajorCode() != null && !updatedMajor.getMajorCode().isEmpty()) {
-        if (majorRepository.existsByMajorCodeAndIsDelete(updatedMajor.getMajorCode(), false) && 
-            !updatedMajor.getMajorCode().equals(existingMajor.getMajorCode())) {
-            throw new RuntimeException("Mã ngành đã tồn tại");
+        if (updatedMajor.getMajorCode() != null && !updatedMajor.getMajorCode().isEmpty()) {
+            if (majorRepository.existsByMajorCodeAndIsDelete(updatedMajor.getMajorCode(), false) &&
+                    !updatedMajor.getMajorCode().equals(existingMajor.getMajorCode())) {
+                throw new RuntimeException("Mã ngành đã tồn tại");
+            }
+            existingMajor.setMajorCode(updatedMajor.getMajorCode());
         }
-        existingMajor.setMajorCode(updatedMajor.getMajorCode());
-    }
 
-    return majorRepository.save(existingMajor);
-}
+        return majorRepository.save(existingMajor);
+    }
 
     public void updateIsDeleted(String majorId, String departmentId) {
         Major major = majorRepository.findById(majorId)
@@ -92,12 +92,10 @@ public class MajorService {
         Department department = departmentRepository.findById(departmentId)
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy khoa."));
 
-       
         major.setDelete(true);
         majorRepository.save(major);
 
-       
         department.getMajorIds().removeIf(id -> id.equals(majorId));
-        departmentRepository.save(department); 
+        departmentRepository.save(department);
     }
 }
