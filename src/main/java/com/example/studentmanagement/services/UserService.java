@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.example.studentmanagement.models.ClassModel;
 import com.example.studentmanagement.models.User;
 import com.example.studentmanagement.repositories.ClassRepository;
 import com.example.studentmanagement.repositories.MajorRepository;
