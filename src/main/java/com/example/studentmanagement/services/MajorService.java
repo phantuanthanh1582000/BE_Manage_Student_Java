@@ -6,8 +6,10 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.example.studentmanagement.models.ClassModel;
 import com.example.studentmanagement.models.Department;
 import com.example.studentmanagement.models.Major;
+import com.example.studentmanagement.repositories.ClassRepository;
 import com.example.studentmanagement.repositories.DepartmentRepository;
 import com.example.studentmanagement.repositories.MajorRepository;
 
@@ -18,6 +20,9 @@ public class MajorService {
 
     @Autowired
     private MajorRepository majorRepository;
+
+    @Autowired
+    private ClassRepository classRepository;
 
     MajorService(DepartmentRepository departmentRepository) {
         this.departmentRepository = departmentRepository;
@@ -94,6 +99,16 @@ public class MajorService {
 
         major.setDelete(true);
         majorRepository.save(major);
+
+        List<String> classIds = major.getClassIds();
+        if (classIds != null) {
+            for (String classId : classIds) {
+                ClassModel classroom = classRepository.findById(classId)
+                        .orElseThrow(() -> new RuntimeException("Không tìm thấy lớp với ID: " + classId));
+                classroom.setDelete(true);
+                classRepository.save(classroom);
+            }
+        }
 
         department.getMajorIds().removeIf(id -> id.equals(majorId));
         departmentRepository.save(department);
