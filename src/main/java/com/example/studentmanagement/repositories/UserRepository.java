@@ -13,4 +13,6 @@ public interface UserRepository extends MongoRepository<User, String> {
     List<User> findByIsDelete(boolean isDelete);
 
     boolean existsByEmailAndIsDelete(String email, boolean isDelete);
+
+    User findByEmail(String email);
 }
