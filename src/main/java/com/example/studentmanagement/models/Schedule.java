@@ -18,6 +18,7 @@ public class Schedule {
     private String subjectId;
     private String classId;
     private String teacherId;
+    private String roomId;  // Thêm trường roomId
 
     private LocalDate startDate;
     private LocalDate endDate;
@@ -40,6 +41,7 @@ public class Schedule {
     }
 
     // ======= GETTERS & SETTERS =======
+
     public String getId() {
         return id;
     }
@@ -70,6 +72,14 @@ public class Schedule {
 
     public void setTeacherId(String teacherId) {
         this.teacherId = teacherId;
+    }
+
+    public String getRoomId() {  
+        return roomId;
+    }
+
+    public void setRoomId(String roomId) {  
+        this.roomId = roomId;
     }
 
     public LocalDate getStartDate() {
