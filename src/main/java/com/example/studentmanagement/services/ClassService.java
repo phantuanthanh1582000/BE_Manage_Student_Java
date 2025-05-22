@@ -1,15 +1,15 @@
 package com.example.studentmanagement.services;
 
-import com.example.studentmanagement.models.ClassModel;
-import com.example.studentmanagement.models.Major;
-import com.example.studentmanagement.repositories.ClassRepository;
-import com.example.studentmanagement.repositories.MajorRepository;
-
 import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.example.studentmanagement.models.ClassModel;
+import com.example.studentmanagement.models.Major;
+import com.example.studentmanagement.repositories.ClassRepository;
+import com.example.studentmanagement.repositories.MajorRepository;
 
 @Service
 public class ClassService {
@@ -85,7 +85,8 @@ public class ClassService {
             throw new RuntimeException("Tên lớp không được để trống.");
         }
 
-        String prefix = newClassName.length() >= 4 ? newClassName.substring(0, 4) : newClassName;
+        // Lấy prefix trước dấu gạch ngang
+        String prefix = newClassName.split("-")[0];
         if (!prefix.equalsIgnoreCase(major.getMajorCode())) {
             throw new RuntimeException("Tên lớp không hợp lệ, phải bắt đầu bằng mã ngành.");
         }

@@ -90,12 +90,14 @@ public class MajorService {
         return majorRepository.save(existingMajor);
     }
 
-    public void updateIsDeleted(String majorId, String departmentId) {
+    public void updateIsDeleted(String majorId) {
         Major major = majorRepository.findById(majorId)
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy ngành học."));
 
-        Department department = departmentRepository.findById(departmentId)
-                .orElseThrow(() -> new RuntimeException("Không tìm thấy khoa."));
+        Department department = departmentRepository.findAll().stream()
+                .filter(dep -> dep.getMajorIds() != null && dep.getMajorIds().contains(majorId))
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy khoa chứa ngành học."));
 
         major.setDelete(true);
         majorRepository.save(major);
@@ -113,4 +115,5 @@ public class MajorService {
         department.getMajorIds().removeIf(id -> id.equals(majorId));
         departmentRepository.save(department);
     }
+
 }
