@@ -58,9 +58,9 @@ public class MajorController {
     }
 
     //Xóa Major khỏi Department
-    @DeleteMapping("/{majorId}/departments/{departmentId}")
-    public ResponseEntity<ResponseWrapper<String>> deleteMajor(@PathVariable String departmentId, @PathVariable String majorId) {
-        majorService.updateIsDeleted(majorId, departmentId);
+    @DeleteMapping("/{majorId}")
+    public ResponseEntity<ResponseWrapper<String>> deleteMajor(@PathVariable String majorId) {
+        majorService.updateIsDeleted(majorId);
 
         ResponseWrapper<String> response = new ResponseWrapper<>(1, "Xóa ngành học thành công", "Ngành học đã xóa khỏi khoa.");
         return ResponseEntity.ok(response);
