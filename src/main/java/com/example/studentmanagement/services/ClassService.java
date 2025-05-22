@@ -38,9 +38,15 @@ public class ClassService {
             throw new RuntimeException("Tên lớp không được để trống.");
         }
 
-        String prefix = classModel.getClassName().length() >= 4
-                ? classModel.getClassName().substring(0, 4)
-                : classModel.getClassName();
+        String className = classModel.getClassName();
+        String prefix;
+        int dashIndex = className.indexOf('-');
+
+        if (dashIndex != -1) {
+            prefix = className.substring(0, dashIndex);
+        } else {
+            prefix = className;
+        }
 
         if (!prefix.equalsIgnoreCase(major.getMajorCode())) {
             throw new RuntimeException("Tên lớp không hợp lệ, phải bắt đầu bằng mã ngành.");
@@ -64,6 +70,7 @@ public class ClassService {
 
         return savedClass;
     }
+
 
     public ClassModel updateClass(String classId, ClassModel updatedClassModel, String majorId) {
 
