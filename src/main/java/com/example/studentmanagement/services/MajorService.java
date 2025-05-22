@@ -3,7 +3,6 @@ package com.example.studentmanagement.services;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.studentmanagement.models.ClassModel;
@@ -17,15 +16,15 @@ import com.example.studentmanagement.repositories.MajorRepository;
 public class MajorService {
 
     private final DepartmentRepository departmentRepository;
+    private final MajorRepository majorRepository;
+    private final ClassRepository classRepository;
 
-    @Autowired
-    private MajorRepository majorRepository;
-
-    @Autowired
-    private ClassRepository classRepository;
-
-    MajorService(DepartmentRepository departmentRepository) {
+    public MajorService(DepartmentRepository departmentRepository,
+                        MajorRepository majorRepository,
+                        ClassRepository classRepository) {
         this.departmentRepository = departmentRepository;
+        this.majorRepository = majorRepository;
+        this.classRepository = classRepository;
     }
 
     public List<Major> getAllMajors() {
@@ -115,5 +114,4 @@ public class MajorService {
         department.getMajorIds().removeIf(id -> id.equals(majorId));
         departmentRepository.save(department);
     }
-
 }
