@@ -35,4 +35,9 @@ public class RoomService {
     public List<RoomModel> getAllRooms() {
         return roomRepository.findAll();
     }
+
+    public RoomModel getRoomById(String id) {
+        return roomRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("Không tìm thấy phòng với id: " + id));
+    }
 }
