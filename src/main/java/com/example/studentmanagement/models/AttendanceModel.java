@@ -12,7 +12,7 @@ public class AttendanceModel {
     private String lessonId;
     private String studentId;
     private String status;
-    private LocalDate date;
+    private String date;
 
     private LocalDateTime createdAt = LocalDateTime.now();
     private LocalDateTime updatedAt = LocalDateTime.now();
@@ -38,10 +38,10 @@ public class AttendanceModel {
     public void setLessonId(String lessonId) {
         this.lessonId = lessonId;
     }
-    public LocalDate getDate() {
+    public String getDate() {
         return date;
     }
-    public void setDate(LocalDate date) {
+    public void setDate(String date) {
         this.date = date;
     }
     public String getStudentId() {

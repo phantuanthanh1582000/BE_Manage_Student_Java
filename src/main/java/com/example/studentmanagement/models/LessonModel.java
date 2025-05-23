@@ -1,6 +1,6 @@
 package com.example.studentmanagement.models;
 
-import java.time.LocalDate;
+
 import java.time.LocalDateTime;
 
 import org.springframework.data.annotation.CreatedDate;
@@ -15,7 +15,7 @@ public class LessonModel {
     private String name;
     private String scheduleId;
 
-    private LocalDate date;
+    private String date;
 
     private String startTime; // chuyển từ LocalTime sang String
     private String endTime;
@@ -29,7 +29,7 @@ public class LessonModel {
     public LessonModel() {
     }
 
-    public LessonModel(String name, String scheduleId, LocalDate date, String startTime, String endTime) {
+    public LessonModel(String name, String scheduleId, String date, String startTime, String endTime) {
         this.name = name;
         this.scheduleId = scheduleId;
         this.date = date;
@@ -62,11 +62,11 @@ public class LessonModel {
         this.scheduleId = scheduleId;
     }
 
-    public LocalDate getDate() {
+    public String getDate() {
         return date;
     }
 
-    public void setDate(LocalDate date) {
+    public void setDate(String date) {
         this.date = date;
     }
 

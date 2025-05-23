@@ -54,7 +54,7 @@ public class LessonService {
                 LessonModel lesson = new LessonModel();
                 lesson.setName("Lesson " + lessonIndex + " : " + subjectName);
                 lesson.setScheduleId(scheduleId);
-                lesson.setDate(date);
+                lesson.setDate(date.toString());
                 lesson.setStartTime(startTime);
                 lesson.setEndTime(endTime);
                 lessons.add(lesson);
@@ -67,5 +67,9 @@ public class LessonService {
 
     public List<LessonModel> getLessonsByScheduleId(String scheduleId) {
         return lessonRepository.findByScheduleId(scheduleId);
+    }
+
+    public List<LessonModel> getLessonsByScheduleIdAndDate( String date) {
+        return lessonRepository.findByDate(date);
     }
 }
