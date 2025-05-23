@@ -63,6 +63,15 @@ public class UserService {
         return userRepository.save(user);
     }
 
+    public List<User> getAllTeachers() {
+        return userRepository.findByRoleAndIsDelete("teacher", false);
+    }
+
+    public User getUserById(String id) {
+    return userRepository.findById(id)
+        .orElseThrow(() -> new RuntimeException("Người dùng không tồn tại."));
+    }
+
     public User authenticate(String email, String password) {
         User user = userRepository.findByEmail(email);
         if (user != null) {
