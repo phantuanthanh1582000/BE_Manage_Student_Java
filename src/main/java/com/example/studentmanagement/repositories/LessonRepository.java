@@ -18,5 +18,5 @@ public interface LessonRepository extends MongoRepository<LessonModel, String> {
     List<LessonModel> findByDateAndScheduleId(LocalDate date, String scheduleId);
     List<LessonModel> findByDate(String date);
 
- 
+    List<LessonModel> findByScheduleIdInAndDate(List<String> scheduleIds, String date);
 }
