@@ -21,4 +21,6 @@ public interface ScheduleRepository extends MongoRepository<Schedule, String> {
     List<Schedule> findBySubjectIdAndIsDeleteFalse(String subjectId);
 
     List<Schedule> findByRoomIdAndDayOfWeekAndIsDeleteFalse(String roomId, String dayOfWeek);
+
+    List<Schedule> findByTeacherId(String teacherId);
 }
