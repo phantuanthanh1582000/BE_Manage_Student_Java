@@ -14,18 +14,24 @@ public class RoomService {
 
     @Autowired
     private RoomRepository roomRepository;
-    RoomService (){
-    }
+    
     // Example method to add a new room
-    public RoomModel addRoom (RoomModel room) {
+    public RoomModel addRoom(RoomModel room) {
         if (room.getName() == null || room.getName().trim().isEmpty()) {
             throw new RuntimeException("Tên phòng không được để trống.");
         }
-        if(room.getStatus() == null){
+
+        boolean exists = roomRepository.existsByNameIgnoreCase(room.getName().trim());
+        if (exists) {
+            throw new RuntimeException("Phòng với tên '" + room.getName() + "' đã tồn tại.");
+        }
+
+        if (room.getStatus() == null) {
             room.setStatus(statusEnum.ACTIVE.getStatus());
         }
         return roomRepository.save(room);
     }
+
     public List<RoomModel> getAllRooms() {
         return roomRepository.findAll();
     }
