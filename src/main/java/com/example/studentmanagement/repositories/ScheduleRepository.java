@@ -19,4 +19,6 @@ public interface ScheduleRepository extends MongoRepository<Schedule, String> {
 
     // Lấy lịch học theo môn học
     List<Schedule> findBySubjectIdAndIsDeleteFalse(String subjectId);
+
+    List<Schedule> findByRoomIdAndDayOfWeekAndIsDeleteFalse(String roomId, String dayOfWeek);
 }
