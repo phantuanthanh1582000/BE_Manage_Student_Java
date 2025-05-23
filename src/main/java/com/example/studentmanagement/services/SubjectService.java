@@ -1,6 +1,7 @@
 package com.example.studentmanagement.services;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,12 @@ public class SubjectService {
     // Lấy tất cả subject chưa bị xóa
     public List<Subject> getAllSubjects() {
         return subjectRepository.findByIsDeleteFalse();
+    }
+
+    public Subject getSubjectById(String id) {
+        return subjectRepository.findById(id)
+                .filter(subject -> !subject.isDelete())
+                .orElseThrow(() -> new NoSuchElementException("Không tìm thấy môn học với ID: " + id));
     }
 
     // Thêm mới subject với majorId

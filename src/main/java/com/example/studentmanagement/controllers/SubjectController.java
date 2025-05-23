@@ -29,6 +29,13 @@ public class SubjectController {
         return ResponseEntity.ok(response);
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<ResponseWrapper<Subject>> getSubjectById(@PathVariable String id) {
+        Subject subject = subjectService.getSubjectById(id);
+        ResponseWrapper<Subject> response = new ResponseWrapper<>(1, "Lấy môn học theo ID thành công", subject);
+        return ResponseEntity.ok(response);
+}
+
     @PostMapping("/majors/{majorId}")
     public ResponseEntity<ResponseWrapper<Subject>> addSubject(@PathVariable String majorId, @RequestBody Subject subject) {
         Subject savedSubject = subjectService.addSubject(subject, majorId);

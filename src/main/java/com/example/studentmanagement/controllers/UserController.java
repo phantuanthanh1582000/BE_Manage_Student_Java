@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,6 +27,21 @@ public class UserController {
         ResponseWrapper<List<User>> response = new ResponseWrapper<>(1, "Lấy danh sách người dùng thành công", userList);
         return ResponseEntity.ok(response);
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<ResponseWrapper<User>> getUserById(@PathVariable String id) {
+        User user = userService.getUserById(id);
+        ResponseWrapper<User> response = new ResponseWrapper<>(1, "Lấy thông tin người dùng thành công", user);
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/teachers")
+    public ResponseEntity<ResponseWrapper<List<User>>> getAllTeachers() {
+        List<User> teachers = userService.getAllTeachers();
+        ResponseWrapper<List<User>> response = new ResponseWrapper<>(1, "Lấy danh sách giáo viên thành công", teachers);
+        return ResponseEntity.ok(response);
+    }
+
 
     @PostMapping
     public ResponseEntity<ResponseWrapper<User>> addUser(@RequestBody User user) {
