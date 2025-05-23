@@ -1,12 +1,13 @@
 package com.example.studentmanagement.services;
 
-
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.example.studentmanagement.dto.AttendanceDTO;
 import com.example.studentmanagement.models.AttendanceModel;
 import com.example.studentmanagement.models.LessonModel;
 import com.example.studentmanagement.models.Schedule;
@@ -29,6 +30,9 @@ public class AttendanceService {
 
     @Autowired
     private LessonRepository lessonRepository;
+
+    @Autowired
+    private UserRepository studentRepository;
 
     public List<AttendanceModel> createBulkAttendanceByScheduleId(String scheduleId) {
         // 1. Lấy tất cả lesson theo scheduleId
@@ -62,8 +66,47 @@ public class AttendanceService {
 
         return attendanceRepository.saveAll(allAttendances);
     }
-    
-    public List<AttendanceModel> getByLessonId(String lessonId) {
-        return attendanceRepository.findByLessonId(lessonId);
+
+    // public List<AttendanceModel> getByLessonId(String lessonId) {
+    // return attendanceRepository.findByLessonId(lessonId);
+    // }
+
+    public List<AttendanceDTO> getAttendancesWithStudentName(String lessonId) {
+        List<AttendanceModel> attendances = attendanceRepository.findByLessonId(lessonId);
+        List<AttendanceDTO> result = new ArrayList<>();
+
+        for (AttendanceModel att : attendances) {
+            AttendanceDTO dto = new AttendanceDTO();
+            dto.setId(att.getId());
+            dto.setLessonId(att.getLessonId());
+            dto.setStudentId(att.getStudentId());
+            dto.setStatus(att.getStatus());
+            dto.setDate(att.getDate());
+
+            // Truy student theo studentId
+            User student = studentRepository.findById(att.getStudentId()).orElse(null);
+            if (student != null) {
+                dto.setStudentName(student.getFullName());
+            } else {
+                dto.setStudentName("N/A");
+            }
+
+            result.add(dto);
+        }
+
+        return result;
+    }
+
+    public void updateAttendanceStatuses(List<String> ids, String newStatus) {
+        List<AttendanceModel> attendances = attendanceRepository.findByIdIn(ids);
+        if (attendances.isEmpty()) {
+            throw new RuntimeException("Không tìm thấy điểm danh nào với các ID đã cho");
+        }
+        for (AttendanceModel att : attendances) {
+            att.setStatus(newStatus);
+            att.setUpdatedAt(LocalDateTime.now()); // nếu có
+        }
+
+        attendanceRepository.saveAll(attendances);
     }
 }
