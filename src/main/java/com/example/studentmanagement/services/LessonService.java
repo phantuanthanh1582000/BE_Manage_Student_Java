@@ -2,6 +2,7 @@ package com.example.studentmanagement.services;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,22 +34,29 @@ public class LessonService {
         Subject subject = subjectRepository.findById(schedule.getSubjectId())
             .orElseThrow(() -> new RuntimeException("Subject not found"));
 
+        // Định dạng ngày tháng trong Schedule (ví dụ "2025-05-23")
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate start = LocalDate.parse(schedule.getStartDate(), dateFormatter);
+        LocalDate end = LocalDate.parse(schedule.getEndDate(), dateFormatter);
 
-        List<LessonModel> lessons = new ArrayList<>();
-        LocalDate start = schedule.getStartDate();
-        LocalDate end = schedule.getEndDate();
-        DayOfWeek targetDay = DayOfWeek.valueOf(schedule.getDayOfWeek().toUpperCase()); // e.g. TUESDAY
+        // Không cần parse startTime và endTime thành LocalTime nữa
+        String startTime = schedule.getStartTime(); // giữ nguyên String
+        String endTime = schedule.getEndTime();
+
+        DayOfWeek targetDay = DayOfWeek.valueOf(schedule.getDayOfWeek().toUpperCase()); // VD: TUESDAY
         String subjectName = subject.getName();
 
+        List<LessonModel> lessons = new ArrayList<>();
         int lessonIndex = 1;
+
         for (LocalDate date = start; !date.isAfter(end); date = date.plusDays(1)) {
             if (date.getDayOfWeek().equals(targetDay)) {
                 LessonModel lesson = new LessonModel();
                 lesson.setName("Lesson " + lessonIndex + " : " + subjectName);
                 lesson.setScheduleId(scheduleId);
                 lesson.setDate(date);
-                lesson.setStartTime(schedule.getStartTime());
-                lesson.setEndTime(schedule.getEndTime());
+                lesson.setStartTime(startTime);
+                lesson.setEndTime(endTime);
                 lessons.add(lesson);
                 lessonIndex++;
             }

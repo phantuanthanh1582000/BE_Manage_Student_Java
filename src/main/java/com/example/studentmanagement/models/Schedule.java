@@ -1,8 +1,6 @@
 package com.example.studentmanagement.models;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
@@ -18,15 +16,17 @@ public class Schedule {
     private String subjectId;
     private String classId;
     private String teacherId;
-    private String roomId;  // Thêm trường roomId
+    private String roomId;
 
-    private LocalDate startDate;
-    private LocalDate endDate;
+    // Chuyển sang String để lưu "yyyy-MM-dd"
+    private String startDate;
+    private String endDate;
 
-    private LocalTime startTime;
-    private LocalTime endTime;
+    // Chuyển sang String để lưu giờ "HH:mm"
+    private String startTime;
+    private String endTime;
 
-    private String dayOfWeek; 
+    private String dayOfWeek;
 
     private boolean isDelete = false;
 
@@ -74,43 +74,43 @@ public class Schedule {
         this.teacherId = teacherId;
     }
 
-    public String getRoomId() {  
+    public String getRoomId() {
         return roomId;
     }
 
-    public void setRoomId(String roomId) {  
+    public void setRoomId(String roomId) {
         this.roomId = roomId;
     }
 
-    public LocalDate getStartDate() {
+    public String getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(LocalDate startDate) {
+    public void setStartDate(String startDate) {
         this.startDate = startDate;
     }
 
-    public LocalDate getEndDate() {
+    public String getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(LocalDate endDate) {
+    public void setEndDate(String endDate) {
         this.endDate = endDate;
     }
 
-    public LocalTime getStartTime() {
+    public String getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(LocalTime startTime) {
+    public void setStartTime(String startTime) {
         this.startTime = startTime;
     }
 
-    public LocalTime getEndTime() {
+    public String getEndTime() {
         return endTime;
     }
 
-    public void setEndTime(LocalTime endTime) {
+    public void setEndTime(String endTime) {
         this.endTime = endTime;
     }
 
