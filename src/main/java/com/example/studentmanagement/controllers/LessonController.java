@@ -37,10 +37,9 @@ public class LessonController {
 
     @GetMapping
     public ResponseEntity<ResponseWrapper<List<LessonModel>>> getLessonsByScheduleId(
-            @RequestBody ScheduleIdRequest lesson) {
-        List<LessonModel> lessons = lessonService.getLessonsByScheduleId(lesson.getScheduleId());
-        ResponseWrapper<List<LessonModel>> response = new ResponseWrapper<>(1, "Lấy danh sách tiết học thành công",
-                lessons);
+            @RequestParam String scheduleId) {
+        List<LessonModel> lessons = lessonService.getLessonsByScheduleId(scheduleId);
+        ResponseWrapper<List<LessonModel>> response = new ResponseWrapper<>(1, "Lấy danh sách tiết học thành công", lessons);
         return ResponseEntity.ok(response);
     }
 
